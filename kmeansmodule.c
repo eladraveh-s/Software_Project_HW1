@@ -182,6 +182,7 @@ static PyObject* fit(PyObject *self, PyObject *args)
     Py_ssize_t j;
 
     double ** centroids = createMatrix(listLenCentroids, pointLen);
+    if (centroids == NULL){return NULL;}
     for (i = 0; i < listLenCentroids; ++i) {
         listInListsCentroids = PyList_GetItem(listOfListsCentroids, i);
         for (j = 0; j < pointLen; ++j) {
@@ -192,6 +193,7 @@ static PyObject* fit(PyObject *self, PyObject *args)
     }
 
     double ** dataPoints = createMatrix(listLenDataPoints, pointLen);
+    if(dataPoints == NULL){return NULL;}
     for (i = 0; i < listLenDataPoints; ++i) {
         listInListsDataPoints = PyList_GetItem(listOfListsDataPoints, i);
         for (j = 0; j < pointLen; ++j) {
