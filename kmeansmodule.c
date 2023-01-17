@@ -156,6 +156,7 @@ static PyObject* fit(PyObject *self, PyObject *args)
     int listLenCentroids;
     int listLenDataPoints;
     int pointLen;
+    int pointlenCheck;
     double epsilon;
     PyObject* listOfListsCentroids;
     PyObject* listInListsCentroids;
@@ -165,11 +166,29 @@ static PyObject* fit(PyObject *self, PyObject *args)
         return NULL;
     }
     
+    if (!PyList_CheckExact(listOfListsCentroids)) {
+        PyErr_SetString(PyExc_RuntimeError, "Received non-list type object.");
+        return NULL;
+    }
+    if (!PyList_CheckExact(listOfListsDataPoints)) {
+        PyErr_SetString(PyExc_RuntimeError, "Received non-list type object.");
+        return NULL;
+    }
     listLenCentroids = PyList_GET_SIZE(listOfListsCentroids);
     listLenDataPoints = PyList_GET_SIZE(listOfListsDataPoints);
+    if((listLenCentroids==0)||(listLenDataPoints==0)){
+        PyErr_SetString(PyExc_RuntimeError, "Recieve an empty list.");
+        return NULL;
+    }
     listInListsCentroids = PyList_GetItem(listOfListsCentroids, 0);
     listInListsDataPoints = PyList_GetItem(listOfListsDataPoints, 0);
     pointLen = PyList_GET_SIZE(listInListsCentroids);
+    pointlenCheck = PyList_GET_SIZE(listInListsDataPoints);
+    if(!(pointLen==pointlenCheck)){
+        PyErr_SetString(PyExc_RuntimeError, "Points length dismatch centroids length.");
+        return NULL;
+    }
+
 
     MAX_ITTER = max_iter;
     EPS = epsilon;
